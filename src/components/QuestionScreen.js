@@ -9,20 +9,21 @@ function QuestionScreen({ question, onAnswer, questionIndex, level, totalQuestio
 
   const normalize = (val) => val?.toString().trim().toLowerCase();
 
-  const areArraysEqualCI = (a = [], b = []) => {
-    const an = a.map((v) => normalize(v)).sort();
-    const bn = b.map((v) => normalize(v)).sort();
-    if (an.length !== bn.length) return false;
-    for (let i = 0; i < an.length; i++) {
-      if (an[i] !== bn[i]) return false;
-    }
-    return true;
-  };
-
-  // ✅ handleSubmit wrapped in useCallback
+  // ✅ Stable handleSubmit using useCallback
   const handleSubmit = useCallback(
     (isTimeout = false) => {
       let isCorrect = false;
+
+      // inline helper
+      const areArraysEqualCI = (a = [], b = []) => {
+        const an = a.map((v) => normalize(v)).sort();
+        const bn = b.map((v) => normalize(v)).sort();
+        if (an.length !== bn.length) return false;
+        for (let i = 0; i < an.length; i++) {
+          if (an[i] !== bn[i]) return false;
+        }
+        return true;
+      };
 
       if (!isTimeout) {
         if (question.type === "checkbox") {
@@ -49,7 +50,6 @@ function QuestionScreen({ question, onAnswer, questionIndex, level, totalQuestio
     [question, userAnswer, onAnswer] // ✅ dependencies
   );
 
-  // Progress percentage
   const progressPercent = ((questionIndex + 1) / totalQuestions) * 100;
 
   const isSelected = (value) => {
@@ -78,7 +78,7 @@ function QuestionScreen({ question, onAnswer, questionIndex, level, totalQuestio
       ? !(Array.isArray(userAnswer) && userAnswer.length > 0)
       : !userAnswer;
 
-  // ✅ Add "Enter" key listener
+  // ✅ Enter key listener uses stable handleSubmit
   useEffect(() => {
     const handleKeyDown = (e) => {
       if (e.key === "Enter" && !submitDisabled) {
@@ -96,7 +96,9 @@ function QuestionScreen({ question, onAnswer, questionIndex, level, totalQuestio
         <div className="card-body">
           {/* ✅ Quiz Header */}
           <div className="d-flex justify-content-between align-items-center mb-2">
-            <span className="badge bg-primary fs-6 text-capitalize">Level: {level}</span>
+            <span className="badge bg-primary fs-6 text-capitalize">
+              Level: {level}
+            </span>
             <span className="badge bg-secondary fs-6">
               Question {questionIndex + 1} of {totalQuestions}
             </span>
@@ -115,11 +117,7 @@ function QuestionScreen({ question, onAnswer, questionIndex, level, totalQuestio
           </div>
 
           {/* Timer */}
-          <Timer
-            duration={15}
-            onTimeUp={() => handleSubmit(true)}
-            resetKey={questionIndex}
-          />
+          <Timer duration={15} onTimeUp={() => handleSubmit(true)} resetKey={questionIndex} />
 
           <h2 className="card-title mb-4">{question.question}</h2>
 
