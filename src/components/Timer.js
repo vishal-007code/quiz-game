@@ -23,6 +23,7 @@ function Timer({ duration, onTimeUp, resetKey }) {
   }, [timeLeft, onTimeUp]);
 
   const progress = (timeLeft / duration) * 100;
+  const lowTime = timeLeft < 5;
 
   return (
     <div className="mb-3">
@@ -32,7 +33,7 @@ function Timer({ duration, onTimeUp, resetKey }) {
       </div>
       <div className="progress" style={{ height: "10px" }}>
         <div
-          className={`progress-bar ${timeLeft < 5 ? "bg-danger" : "bg-success"}`}
+          className={`progress-bar ${lowTime ? "bg-danger" : "bg-success"}`}
           role="progressbar"
           style={{ width: `${progress}%` }}
           aria-valuenow={timeLeft}

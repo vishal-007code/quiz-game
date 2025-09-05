@@ -1,63 +1,94 @@
-/* General Quiz Card Styling */
 .quiz-card {
   max-width: 700px;
   margin-top: 50px;
-  border-radius: 15px;
-  background: #ffffff;
-  transition: transform 0.3s ease;
+  border-radius: 16px;
+  background: linear-gradient(180deg, rgba(255,255,255,0.92), rgba(255,255,255,0.88)) padding-box,
+              linear-gradient(135deg, #667eea, #764ba2, #4facfe) border-box;
+  border: 2px solid transparent;
+  backdrop-filter: blur(6px);
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.06);
+  transition: transform 0.3s ease, box-shadow 0.3s ease, background-position 1s ease;
+  background-size: 100% 100%, 300% 300%;
+  animation: cardGradientShift 12s ease infinite;
+}
+
+@keyframes cardGradientShift {
+  0% { background-position: 0% 50%, 0% 50%; }
+  50% { background-position: 0% 50%, 100% 50%; }
+  100% { background-position: 0% 50%, 0% 50%; }
 }
 
 .quiz-card:hover {
-  transform: translateY(-5px);
+  transform: translateY(-3px);
+  box-shadow: 0 14px 36px rgba(0, 0, 0, 0.08);
 }
 
-/* Question Title */
 .quiz-card .card-title {
-  font-size: 1.5rem;
-  font-weight: 600;
-  color: #2c3e50;
+  font-size: 1.6rem;
+  font-weight: 800;
+  color: #22304a;
 }
 
-/* Radio Options */
-.options .form-check-label {
-  font-size: 1.1rem;
-  cursor: pointer;
+/* Gradient text for question */
+.question-title {
+  background: linear-gradient(90deg, #111827, #1f2937, #4f46e5);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
 }
 
-.options .form-check-input:checked + .form-check-label {
-  font-weight: bold;
+.btn.btn-outline-secondary,
+.btn.btn-outline-primary {
+  border-width: 2px;
+  border-radius: 12px;
+  padding: 10px 16px;
+}
+
+.btn-outline-secondary:hover {
+  background: #f7f9ff;
+}
+
+.btn-outline-primary.active {
+  background: rgba(13, 110, 253, 0.1);
+  border-color: #0d6efd;
   color: #0d6efd;
 }
 
-/* Text Input */
 .form-control {
   font-size: 1rem;
-  padding: 10px;
-  border-radius: 8px;
+  padding: 12px 14px;
+  border-radius: 10px;
 }
 
-/* Feedback Alerts */
 .feedback {
   margin-top: 15px;
-  font-size: 1.2rem;
-  font-weight: 500;
-}
-
-/* Keep quiz card neat */
-.quiz-card {
-  max-width: 700px;
-  margin-top: 50px;
-  border-radius: 15px;
-}
-
-/* Left-aligned options */
-.options .form-check-label {
   font-size: 1.1rem;
-  cursor: pointer;
+  font-weight: 600;
 }
 
-.options .form-check-input:checked + .form-check-label {
-  font-weight: bold;
-  color: #0d6efd;
+.progress {
+  background-color: #eef2ff;
+  border-radius: 999px;
+  overflow: hidden;
+}
+
+.d-flex.gap-2 > .btn,
+.d-flex.flex-wrap.gap-2 > .btn {
+  margin-bottom: 6px;
+}
+
+@media (max-width: 576px) {
+  .quiz-card { margin-top: 24px; border-radius: 14px; }
+  .quiz-card .card-title { font-size: 1.25rem; }
+  .d-flex.flex-wrap.gap-2 > .btn { flex: 1 1 calc(50% - 8px); min-width: 120px; }
+}
+
+@media (min-width: 577px) and (max-width: 768px) {
+  .quiz-card { max-width: 600px; }
+  .quiz-card .card-title { font-size: 1.4rem; }
+}
+
+@media (min-width: 1200px) {
+  .quiz-card { max-width: 760px; }
 }
 

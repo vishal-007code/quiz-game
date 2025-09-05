@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import "bootstrap/dist/css/bootstrap.min.css";
 import StartScreen from "./components/StartScreen";
 import QuestionScreen from "./components/QuestionScreen";
@@ -14,10 +14,68 @@ function App() {
   const [gameOver, setGameOver] = useState(false);
   const [levelCompleted, setLevelCompleted] = useState(false);
   const [levelPassed, setLevelPassed] = useState(false);
+  const [shuffledQuestions, setShuffledQuestions] = useState({ easy: [], medium: [], hard: [] });
+  const [hasSavedGame, setHasSavedGame] = useState(false);
 
+  const STORAGE_KEY = "quiz_progress_v1";
   const levels = ["easy", "medium", "hard"];
 
+  const shuffleArray = (array) => {
+    const copy = [...array];
+    for (let i = copy.length - 1; i > 0; i--) {
+      const j = Math.floor(Math.random() * (i + 1));
+      [copy[i], copy[j]] = [copy[j], copy[i]];
+    }
+    return copy;
+  };
+
+  const buildShuffledForAll = () => ({
+    easy: shuffleArray(questionsData.easy || []),
+    medium: shuffleArray(questionsData.medium || []),
+    hard: shuffleArray(questionsData.hard || []),
+  });
+
+  useEffect(() => {
+    try {
+      const raw = localStorage.getItem(STORAGE_KEY);
+      setHasSavedGame(Boolean(raw));
+    } catch (_) {
+      setHasSavedGame(false);
+    }
+  }, []);
+
+  useEffect(() => {
+    if (!gameStarted) return;
+    try {
+      const payload = {
+        gameStarted,
+        currentLevel,
+        currentQuestionIndex,
+        score,
+        correctCount,
+        gameOver,
+        levelCompleted,
+        levelPassed,
+        shuffledQuestions,
+      };
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(payload));
+      setHasSavedGame(true);
+    } catch (_) {
+    }
+  }, [gameStarted, currentLevel, currentQuestionIndex, score, correctCount, gameOver, levelCompleted, levelPassed, shuffledQuestions]);
+
+  const clearSavedGame = () => {
+    try {
+      localStorage.removeItem(STORAGE_KEY);
+      setHasSavedGame(false);
+    } catch (_) {
+    }
+  };
+
   const startGame = () => {
+    const shuffled = buildShuffledForAll();
+
+    setShuffledQuestions(shuffled);
     setGameStarted(true);
     setCurrentLevel("easy");
     setCurrentQuestionIndex(0);
@@ -25,6 +83,28 @@ function App() {
     setCorrectCount(0);
     setGameOver(false);
     setLevelCompleted(false);
+    setLevelPassed(false);
+    clearSavedGame();
+  };
+
+  const resumeGame = () => {
+    try {
+      const raw = localStorage.getItem(STORAGE_KEY);
+      if (!raw) return;
+      const data = JSON.parse(raw);
+      if (!data || !data.shuffledQuestions) return;
+      setShuffledQuestions(data.shuffledQuestions);
+      setGameStarted(true);
+      setCurrentLevel(data.currentLevel || "easy");
+      setCurrentQuestionIndex(Number(data.currentQuestionIndex) || 0);
+      setScore(Number(data.score) || 0);
+      setCorrectCount(Number(data.correctCount) || 0);
+      setGameOver(Boolean(data.gameOver));
+      setLevelCompleted(Boolean(data.levelCompleted));
+      setLevelPassed(Boolean(data.levelPassed));
+    } catch (_) {
+      startGame();
+    }
   };
 
   const handleAnswer = (isCorrect) => {
@@ -38,14 +118,17 @@ function App() {
       updatedCorrectCount += 1;
     }
 
-    // Move to next question
-    if (currentQuestionIndex + 1 < questionsData[currentLevel].length) {
+    if (currentQuestionIndex + 1 < (shuffledQuestions[currentLevel]?.length || 0)) {
       setCurrentQuestionIndex(currentQuestionIndex + 1);
     } else {
-      // Level finished
       const passed = updatedCorrectCount >= 2;
-      setLevelCompleted(true);
-      setLevelPassed(passed);
+      
+      if (currentLevel === "hard") {
+        setGameOver(true);
+      } else {
+        setLevelCompleted(true);
+        setLevelPassed(passed);
+      }
     }
 
     setScore(updatedScore);
@@ -65,26 +148,33 @@ function App() {
   };
 
   const retryLevel = () => {
+    setShuffledQuestions((prev) => ({
+      ...prev,
+      [currentLevel]: shuffleArray(questionsData[currentLevel] || []),
+    }));
     setCurrentQuestionIndex(0);
     setCorrectCount(0);
     setLevelCompleted(false);
   };
 
+  const currentLevelQuestions = shuffledQuestions[currentLevel] || [];
+
   return (
     <div className="container py-5 text-center">
-      {!gameStarted && <StartScreen onStart={startGame} />}
+      {!gameStarted && (
+        <StartScreen onStart={startGame} onResume={resumeGame} hasSavedGame={hasSavedGame} />
+      )}
 
-      {gameStarted && !gameOver && !levelCompleted && (
+      {gameStarted && !gameOver && !levelCompleted && currentLevelQuestions.length > 0 && (
         <QuestionScreen
-          question={questionsData[currentLevel][currentQuestionIndex]}
+          question={currentLevelQuestions[currentQuestionIndex]}
           onAnswer={handleAnswer}
           questionIndex={currentQuestionIndex}
           level={currentLevel}
-          totalQuestions={questionsData[currentLevel].length}
+          totalQuestions={currentLevelQuestions.length}
         />
       )}
 
-      {/* Level Completion Screen */}
       {levelCompleted && !gameOver && (
         <div className="card p-5 shadow-lg">
           {levelPassed ? (

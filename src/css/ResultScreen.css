@@ -4,28 +4,29 @@
   padding: 40px;
   max-width: 600px;
   width: 100%;
-  border-radius: 15px;
+  border-radius: 18px;
   background: linear-gradient(135deg, #fdfbfb 0%, #ebedee 100%);
+  box-shadow: 0 14px 36px rgba(0, 0, 0, 0.08);
   transition: transform 0.3s ease, box-shadow 0.3s ease;
 }
 
 .result-card:hover {
-  transform: translateY(-5px);
-  box-shadow: 0 10px 20px rgba(0, 0, 0, 0.15);
+  transform: translateY(-4px);
+  box-shadow: 0 16px 40px rgba(0, 0, 0, 0.12);
 }
 
 /* Title */
 .result-card h1 {
   font-size: 2.2rem;
-  font-weight: 700;
-  color: #2c3e50;
+  font-weight: 800;
+  color: #1f2a3d;
 }
 
 /* Score Label */
 .score-text {
-  font-size: 1.2rem;
+  font-size: 1.1rem;
   margin-bottom: 0;
-  color: #555;
+  color: #556;
 }
 
 /* Final Score Styling */
@@ -33,5 +34,17 @@
   font-size: 3rem;
   font-weight: 800;
   color: #0d6efd;
-  margin: 10px 0 20px 0;
+  margin: 10px 0 10px 0;
+}
+
+/* High score badge */
+.text-success.fw-bold {
+  margin-top: 4px;
+}
+
+/* Responsive */
+@media (max-width: 576px) {
+  .result-card { margin-top: 40px; padding: 28px; }
+  .result-card h1 { font-size: 1.8rem; }
+  .final-score { font-size: 2.4rem; }
 }

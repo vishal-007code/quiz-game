@@ -2,7 +2,7 @@
   "easy": [
     {
       "type": "multiple-choice",
-      "question": "Which of the following is a JavaScript framework?",
+      "question": "Which of the following is a JavaScript Library?",
       "options": ["React", "CSS", "HTML", "Python"],
       "correctAnswer": "React"
     },
@@ -15,6 +15,12 @@
       "type": "text-input",
       "question": "What does DOM stand for?",
       "correctAnswer": "Document Object Model"
+    },
+    {
+      "type": "checkbox",
+      "question": "Select all programming languages.",
+      "options": ["JavaScript", "HTML", "CSS", "Python"],
+      "correctAnswer": ["JavaScript", "Python"]
     }
   ],
   "medium": [
@@ -33,6 +39,12 @@
       "type": "text-input",
       "question": "What keyword is used to define a constant in JavaScript?",
       "correctAnswer": "const"
+    },
+    {
+      "type": "checkbox",
+      "question": "Select all array methods.",
+      "options": ["map", "filter", "size", "reduce"],
+      "correctAnswer": ["map", "filter", "reduce"]
     }
   ],
   "hard": [
@@ -51,6 +63,12 @@
       "type": "text-input",
       "question": "What is the result of 0.1 + 0.2 === 0.3 in JavaScript?",
       "correctAnswer": "false"
+    },
+    {
+      "type": "checkbox",
+      "question": "Select all truthy values in JavaScript.",
+      "options": ["0", "1", "\"\"", "[]", "null", "{}"],
+      "correctAnswer": ["1", "[]", "{}"]
     }
   ]
 }
