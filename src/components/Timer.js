@@ -4,7 +4,6 @@ import "../css/Timer.css";
 function Timer({ duration, onTimeUp, resetKey }) {
   const [timeLeft, setTimeLeft] = useState(duration);
 
-  // Reset timer whenever resetKey changes
   useEffect(() => {
     setTimeLeft(duration);
   }, [resetKey, duration]);

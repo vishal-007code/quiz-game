@@ -14,7 +14,6 @@ function QuestionScreen({ question, onAnswer, questionIndex, level, totalQuestio
     (isTimeout = false) => {
       let isCorrect = false;
 
-      // inline helper
       const areArraysEqualCI = (a = [], b = []) => {
         const an = a.map((v) => normalize(v)).sort();
         const bn = b.map((v) => normalize(v)).sort();
@@ -47,7 +46,7 @@ function QuestionScreen({ question, onAnswer, questionIndex, level, totalQuestio
         setUserAnswer("");
       }, 1000);
     },
-    [question, userAnswer, onAnswer] // ✅ dependencies
+    [question, userAnswer, onAnswer]
   );
 
   const progressPercent = ((questionIndex + 1) / totalQuestions) * 100;
@@ -91,10 +90,9 @@ function QuestionScreen({ question, onAnswer, questionIndex, level, totalQuestio
   }, [submitDisabled, handleSubmit]);
 
   return (
-    <div className="container d-flex justify-content-center">
+    <div className="quiz-wrapper">
       <div className="card quiz-card shadow-lg w-100">
         <div className="card-body">
-          {/* ✅ Quiz Header */}
           <div className="d-flex justify-content-between align-items-center mb-2">
             <span className="badge bg-primary fs-6 text-capitalize">
               Level: {level}

@@ -18,7 +18,7 @@ function ResultScreen({ score, onRestart }) {
 
   return (
     <div className="container d-flex justify-content-center">
-      <div className="result-card shadow-lg text-center">
+      <div className={`result-card shadow-lg text-center ${isNewHigh ? "confetti" : ""}`}>
         <h1 className="mb-4">🎉 Game Over!</h1>
         <p className="score-text">Your total score:</p>
         <h2 className="final-score">{score}</h2>

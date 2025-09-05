@@ -29,7 +29,6 @@ body {
     monospace;
 }
 
-/* Add subtle overlay for better text readability */
 .container {
   position: relative;
 }
@@ -47,7 +46,6 @@ body {
   pointer-events: none;
 }
 
-/* Responsive typography */
 @media (max-width: 576px) {
   body { font-size: 14px; }
 }

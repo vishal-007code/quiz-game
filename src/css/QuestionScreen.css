@@ -9,7 +9,12 @@
   box-shadow: 0 10px 30px rgba(0, 0, 0, 0.06);
   transition: transform 0.3s ease, box-shadow 0.3s ease, background-position 1s ease;
   background-size: 100% 100%, 300% 300%;
-  animation: cardGradientShift 12s ease infinite;
+  animation: cardGradientShift 12s ease infinite, cardEnter 350ms ease-out both;
+}
+
+@keyframes cardEnter {
+  from { transform: translateY(8px); opacity: 0; }
+  to { transform: translateY(0); opacity: 1; }
 }
 
 @keyframes cardGradientShift {
@@ -52,6 +57,7 @@
   background: rgba(13, 110, 253, 0.1);
   border-color: #0d6efd;
   color: #0d6efd;
+  box-shadow: 0 0 0 0.2rem rgba(13, 110, 253, 0.15);
 }
 
 .form-control {
@@ -60,10 +66,21 @@
   border-radius: 10px;
 }
 
+/* Animated feedback */
 .feedback {
   margin-top: 15px;
   font-size: 1.1rem;
-  font-weight: 600;
+  font-weight: 700;
+  animation: popIn 300ms ease-out;
+}
+
+.feedback-success { color: #16a34a; }
+.feedback-error { color: #dc2626; }
+
+@keyframes popIn {
+  0% { transform: scale(0.98); opacity: 0; }
+  60% { transform: scale(1.02); opacity: 1; }
+  100% { transform: scale(1); }
 }
 
 .progress {

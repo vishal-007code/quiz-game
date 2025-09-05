@@ -2,7 +2,7 @@
   "easy": [
     {
       "type": "multiple-choice",
-      "question": "Which of the following is a JavaScript Library?",
+      "question": "Which of the following is a JavaScript framework?",
       "options": ["React", "CSS", "HTML", "Python"],
       "correctAnswer": "React"
     },
